@@ -4,6 +4,12 @@ This code was written to perform the following tasks:
 * Locate attached displays
 * Use gliv to display in fullscreen and image maximized the artwork of the Artist directory and artwork in album directory
 
+## Requirements
+* xrandr
+* gliv
+
+That's all. 
+
 # Usage
 
 `git clone https://github.com/bubonic/cmusglivme`
@@ -12,7 +18,7 @@ This code was written to perform the following tasks:
 
 `chmod +x cmusglivme.sh levenstein.pl`
 
-`cd .glivrc ~/ && cp cmusglivme.sh levenstein.pl ~/.cmus`
+`cp .glivrc ~/ && cp cmusglivme.sh levenstein.pl ~/.cmus`
 
 In cmus type the following:
 `:set status_display_program=/home/user/.cmus/cmusglivme.sh`
