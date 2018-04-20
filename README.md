@@ -12,7 +12,7 @@ This code was written to perform the following tasks:
 
 `chmod +x cmusglivme.sh levenstein.pl`
 
-`cd .glivrc ~ && cp cmusglivme.sh ~/.cmus`
+`cd .glivrc ~/ && cp cmusglivme.sh levenstein.pl ~/.cmus`
 
 In cmus type the following:
 `:set status_display_program=/home/user/.cmus/cmusglivme.sh`
