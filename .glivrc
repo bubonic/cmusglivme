@@ -43,7 +43,7 @@ mipmap        = False
 mnemonics     = False
 
 # Make the slide show loop
-loop          = False
+loop          = True
 
 # Keep only one image in memory
 one_image     = False
