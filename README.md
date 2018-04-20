@@ -18,6 +18,7 @@ In cmus type the following:
 
 ## Options
 You can set the following options in cmusglivme.sh at the beginning of the file:
+
 `FULLSCREEN="No"`
 
 `ARTIST_ART="/media/bubonic/MyWD/Pictures/Artists/"`
