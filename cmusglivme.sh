@@ -18,9 +18,12 @@
 # 2018
 
 
-#edit to "Yes" or "No"
+#edit to "Yes" or "No" & define ARTIST_ART directory
 FULLSCREEN="No"
 ARTIST_ART="/media/bubonic/MyWD/Pictures/Artists/"
+
+# creat list of artists from directory for fuzzy-matching
+ls -1 "$ARTIST_ART" > /tmp/artists.list
 
 status=$2
 file_path=`echo $4 | sed 's/file //' | sed 's:^\(.*\)/.*$:\1:'`/
@@ -32,7 +35,9 @@ VGADISPLAY=`xrandr | grep "VGA-1" | awk '{print $2}'`
 HDMIDISPLAY=`xrandr | grep "HDMI-1" | awk '{print $2}'`
 DPDISPLAY=`xrandr | grep "DP-1" | awk '{print $2}'`
 
-ARTIST_ART_PATH="$ARTIST_ART$artist"
+AAPATH=`~/.cmus/levenstein.pl "$artist" "/tmp/artists.list"`
+ARTIST_ART_PATH="$ARTIST_ART$AAPATH"
+#ARTIST_ART_PATH="$ARTIST_ART$artist"
 
 if [ $VGADISPLAY = "connected" ]; then
 	DIMENSION=`xrandr | grep "VGA-1" | awk '{print $3}'`
