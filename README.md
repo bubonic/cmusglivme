@@ -37,4 +37,13 @@ will have the function to display on the primary screen in fullscreen mode. If s
 ARIST_ART="DIR"
 is the directory containing art of the artist. The code will use the levenstein.pl fuzzy matching algorithm to come up with a directory of the best match of the artist ID3 tag provided by cmus. 
 
+# discogsartistimgs.py
+
+This little python app will take two argumets: 1) The Artist name in quotes, e.g. "John Digweed" 2) The location where you store your artists images for cmusglivme.sh
+
+`Usage: ./discogsartistimgs.py 'Artist Name' '/directory/of/artist/images/`
+
+It will download all the artist images from discogs for the first artist found in the search term, so be precise. It will create a directory '/directory/of/artist/images/Arist Name` and download all images to that folder. 
+Used in conjunction with cmusglivme.sh this will give you all the art you need for your party. 
+
 # Enjoy!
