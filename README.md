@@ -3,6 +3,7 @@ CMus artwork displayer. Displays a slideshow of artwork in folder of track being
 This code was written to perform the following tasks:
 * Locate attached displays
 * Use gliv to display in fullscreen and image maximized the artwork of the Artist directory and artwork in album directory
+* gliv has a fade in/fade out effect for a nice presentation of the slideshow. be sure to use the .glivrc file. 
 
 ## Requirements
 * xrandr
@@ -35,7 +36,8 @@ FULLSCREEN="Yes"
 will have the function to display on the primary screen in fullscreen mode. If set to "No" (default) it will use attached displays and display the artwork in fullscreen mode on attached displays. Set "Yes" if you are using something like chromecast or don't have an attached display
  
 ARIST_ART="DIR"
-is the directory containing art of the artist. The code will use the levenstein.pl fuzzy matching algorithm to come up with a directory of the best match of the artist ID3 tag provided by cmus. 
+is the directory containing directories of artists which in turn contain art of the specified artist. The code will use the levenstein.pl fuzzy matching algorithm to come up with a directory of the best match of the artist ID3 tag provided by cmus.
+So if cmus reports an artist of "Micheal Jakson" (due to poor ID3 tags) and you have a directory in /media/bubonic/MyWD/Pictures/Michael Jackson", cmusglivme.sh will fuzzy match to the correct directory and display the art in that directory.  
 
 # discogsartistimgs.py
 
