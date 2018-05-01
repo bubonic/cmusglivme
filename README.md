@@ -8,8 +8,20 @@ This code was written to perform the following tasks:
 ## Requirements
 * xrandr
 * gliv
+* BeautifulSoup (python module)
+
+`sudo apt-get install gliv`
+
+`pip install BeautifulSoup`
 
 That's all. 
+
+# Features
+
+* Remotely downloads album art to directory of current playing track (discogsalbumart.py)
+* Python app to download artist directory to a root directory of artist art
+* Uses gliv with fade-in/fade-out effects to display artwork - a fullscreen slideshow - on an attached display or chromcasted. 
+* Heart of the program is cmusglivme.sh
 
 # Usage
 
@@ -19,7 +31,7 @@ That's all.
 
 `chmod +x cmusglivme.sh levenstein.pl`
 
-`cp .glivrc ~/ && cp cmusglivme.sh levenstein.pl ~/.cmus`
+`cp .glivrc ~/ && cp cmusglivme.sh discogsalbumart.py discogsartistimgs.py levenstein.pl ~/.cmus`
 
 In cmus type the following:
 `:set status_display_program=/home/user/.cmus/cmusglivme.sh`
@@ -48,4 +60,9 @@ This little python app will take two argumets: 1) The Artist name in quotes, e.g
 It will download all the artist images from discogs for the first artist found in the search term, so be precise. It will create a directory '/directory/of/artist/images/Arist Name` and download all images to that folder. 
 Used in conjunction with cmusglivme.sh this will give you all the art you need for your party. 
 
+# TODO
+
+Integrate discogsartistimgs.py to download artist art to specified artist art root directory if no images found. Should be a few lines of code. I just take my time with these things. 
+
 # Enjoy!
+
