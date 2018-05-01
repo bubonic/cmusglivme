@@ -31,6 +31,7 @@ duration=`cmus-remote -Q | grep "duration" | sed 's/duration //'`
 position=`cmus-remote -Q | grep "position" | sed 's/position //'`
 TIMER=$((duration-position))
 artist=`cmus-remote -Q | grep "tag artist" | sed 's/tag artist //' | sed -e "s/\b\(.\)/\u\1/g"`
+album=`cmus-remote -Q | grep "tag album" | sed 's/tag album //' | head -1`
 VGADISPLAY=`xrandr | grep "VGA-1" | awk '{print $2}'`
 HDMIDISPLAY=`xrandr | grep "HDMI-1" | awk '{print $2}'`
 DPDISPLAY=`xrandr | grep "DP-1" | awk '{print $2}'`
@@ -52,9 +53,11 @@ if [ $status = "playing" ]; then
 	#COVER_PHOTO=`ls -as "$file_path" | grep ".jpg\|.jpeg\|.png" | sort -g | tail -1 | awk '{for (i=2; i<NF; i++) printf $i " "; print $NF}'`
 	if [ $FULLSCREEN = "Yes" ]; then
 		sed -i 's/full-screen.*\=.False/full-screen	\= True/g' ~/.glivrc
+		~/.cmus/discogsalbumart.py "$artist" "$album" "$file_path"
 		gliv "$file_path" "$ARTIST_ART_PATH" &
 	else
 		sed -i 's/full-screen.*\=.True/full-screen	\= False/g' ~/.glivrc
+		~/.cmus/discogsalbumart.py "$artist" "$album" "$file_path"
 		gliv -G=$DIMENSION  "$file_path" "$ARTIST_ART_PATH" &
 	fi
 	pid=$!
