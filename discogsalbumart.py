@@ -107,6 +107,7 @@ for artistCODE in ArtistMatches:
             albumURL = MatchArtist(sys.argv[1], Artists, Albums, j)
             if albumURL:
                 break
+            j += 1
         else:
             aka = 1
             Artists.append(artistCODE.a.getText())
