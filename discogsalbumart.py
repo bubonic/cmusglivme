@@ -27,7 +27,20 @@ Artist = sys.argv[1].replace(' ','+')
 Album = sys.argv[2].replace(' ','+')
 AlbumDIR = sys.argv[3]
 featuring = 0
+aka = 0
 
+def MatchArtist(artist, Artists, Albums, j):
+    artist_re = re.compile(sys.argv[1], re.DOTALL | re.IGNORECASE)
+    artist_reMatch = artist_re.search(Artists[-1])
+    if artist_reMatch is not None:
+            albumURL = rootURL + Albums['href'][j]
+            print "Artist Match %s:\t %s" % (j,Artists[j])
+            print "Album Match:\t %s" % Albums['title'][j]
+            print "Album Match URL:\t %s" % Albums['href'][j]
+            return albumURL
+    else:
+        return None
+    
 print "Artist search:\t %s" % sys.argv[1]
 print "Search term:\t %s" % Album
 
@@ -59,7 +72,7 @@ for albumCODE in AlbumMatches:
     Albums['href'].append(albumCODE['href'])
 
 j=0
-artist_re = re.compile(sys.argv[1], re.DOTALL | re.IGNORECASE)    
+#artist_re = re.compile(sys.argv[1], re.DOTALL | re.IGNORECASE)    
 artistExclude_re = re.compile('|'.join(artistExclude), re.DOTALL | re.IGNORECASE)
 artistExclude2_re = re.compile('A.K.A|AKA', re.DOTALL | re.IGNORECASE)
 for artistCODE in ArtistMatches:
@@ -70,39 +83,35 @@ for artistCODE in ArtistMatches:
         print "Artist %s:\t %s" % (j,Artists[-1])
         j += 1
         continue
+    if aka == 1:
+        Artists[-1] = ''.join([Artists[-1], ' A.K.A. ', artistCODE.a.getText()])
+        aka = 0
+        print "Artist %s:\t %s" % (j,Artists[-1])
+        albumURL = MatchArtist(sys.argv[1], Artists, Albums, j)
+        if albumURL:
+            break
+        j += 1
+        continue
+  
     if aExcludeMatch is not None:
         featuring = 1
         Artists.append(artistCODE.a.getText())
-        artist_reMatch = artist_re.search(artistCODE.a.getText())
-        if artist_reMatch is not None:
-            albumURL = rootURL + Albums['href'][j]
-            print "Artist Match %s:\t %s" % (j, Artists[j])
-            print "Album Match:\t %s" % Albums['title'][j]
-            print "Album Match URL:\t %s" % Albums['href'][j]
+        albumURL = MatchArtist(sys.argv[1], Artists, Albums, j)
+        if albumURL:
             break
     else:
         aExcludeMatch2 = artistExclude2_re.search(artistCODE.getText())
         if aExcludeMatch2 is None:
             print "Artist %s:\t %s" % (j,artistCODE.a.getText())
             Artists.append(artistCODE.a.getText())
-            artist_reMatch = artist_re.search(Artists[-1])
-            if artist_reMatch is not None:
-                albumURL = rootURL + Albums['href'][j]
-                print "Artist Match %s:\t %s" % (j, Artists[j])
-                print "Album Match:\t %s" % Albums['title'][j]
-                print "Album Match URL:\t %s" % Albums['href'][j]
+            albumURL = MatchArtist(sys.argv[1], Artists, Albums, j)
+            if albumURL:
                 break
-            j += 1
         else:
-            print "Artist %s:\t %s" % (j,artistCODE.a.getText())
-            artist_reMatch = artist_re.search(Artists[-1])
-            if artist_reMatch is not None:
-                albumURL = rootURL + Albums['href'][j]
-                print "Artist Match %s:\t %s" % (j,Artists[j])
-                print "Album Match:\t %s" % Albums['title'][j]
-                print "Album Match URL:\t %s" % Albums['href'][j]
-                break
-
+            aka = 1
+            Artists.append(artistCODE.a.getText())
+            #print "Artist %s:\t %s" % (j,Artists[-1])
+            
 
 
 print "Album URL result:\t %s" % albumURL
