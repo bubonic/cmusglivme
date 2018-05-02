@@ -26,6 +26,7 @@ USER_AGENT = 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:49.0) Gecko/20100101 Firefo
 Artist = sys.argv[1].replace(' ','+')
 Album = sys.argv[2].replace(' ','+')
 AlbumDIR = sys.argv[3]
+featuring = 0
 
 print "Artist search:\t %s" % sys.argv[1]
 print "Search term:\t %s" % Album
@@ -47,6 +48,10 @@ soup = BeautifulSoup(HTML)
 AlbumMatches = soup.findAll('a', {'class' : 'search_result_title'})
 ArtistMatches = soup.findAll('spanitemprop')
 
+#print "ARTIST MATCH BLOCK: %s" % ArtistMatches
+
+
+
 #print "ArtistMatches Block: %s" % ArtistMatches
 
 for albumCODE in AlbumMatches:
@@ -56,11 +61,25 @@ for albumCODE in AlbumMatches:
 j=0
 artist_re = re.compile(sys.argv[1], re.DOTALL | re.IGNORECASE)    
 artistExclude_re = re.compile('|'.join(artistExclude), re.DOTALL | re.IGNORECASE)
-artistExclude2_re = re.compile('A.K.A', re.DOTALL | re.IGNORECASE)
+artistExclude2_re = re.compile('A.K.A|AKA', re.DOTALL | re.IGNORECASE)
 for artistCODE in ArtistMatches:
     aExcludeMatch = artistExclude_re.search(artistCODE.getText())
+    if featuring == 1:
+        Artists[-1] = ''.join([Artists[-1], ' Featuring ', artistCODE.a.getText()])
+        featuring = 0
+        print "Artist %s:\t %s" % (j,Artists[-1])
+        j += 1
+        continue
     if aExcludeMatch is not None:
-        print "Contains other artists, skipping"
+        featuring = 1
+        Artists.append(artistCODE.a.getText())
+        artist_reMatch = artist_re.search(artistCODE.a.getText())
+        if artist_reMatch is not None:
+            albumURL = rootURL + Albums['href'][j]
+            print "Artist Match %s:\t %s" % (j, Artists[j])
+            print "Album Match:\t %s" % Albums['title'][j]
+            print "Album Match URL:\t %s" % Albums['href'][j]
+            break
     else:
         aExcludeMatch2 = artistExclude2_re.search(artistCODE.getText())
         if aExcludeMatch2 is None:
@@ -69,26 +88,24 @@ for artistCODE in ArtistMatches:
             artist_reMatch = artist_re.search(Artists[-1])
             if artist_reMatch is not None:
                 albumURL = rootURL + Albums['href'][j]
-                print "Artist Match:\t %s" % Artists[j]
+                print "Artist Match %s:\t %s" % (j, Artists[j])
                 print "Album Match:\t %s" % Albums['title'][j]
                 print "Album Match URL:\t %s" % Albums['href'][j]
                 break
             j += 1
         else:
             print "Artist %s:\t %s" % (j,artistCODE.a.getText())
-            Artists.append(artistCODE.a.getText())
             artist_reMatch = artist_re.search(Artists[-1])
             if artist_reMatch is not None:
                 albumURL = rootURL + Albums['href'][j]
-                print "Artist Match:\t %s" % Artists[j]
+                print "Artist Match %s:\t %s" % (j,Artists[j])
                 print "Album Match:\t %s" % Albums['title'][j]
                 print "Album Match URL:\t %s" % Albums['href'][j]
                 break
 
 
-#albumURL = rootURL + Albums['href'][0]
-print "Album URL result:\t %s" % albumURL
 
+print "Album URL result:\t %s" % albumURL
 
 request = urllib2.Request(albumURL)
 request.add_header('User-Agent', USER_AGENT)
