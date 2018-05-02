@@ -18,7 +18,7 @@ if len(sys.argv) < 4:
 URLprefix = 'https://www.discogs.com/search/?q='
 URLpostfix = '&type=release'
 rootURL = 'https://www.discogs.com'
-artistExclude =['A.K.A.', 'Feat.', 'Featuring']
+artistExclude =['Feat.', 'Featuring']
 imagesURL = [ ]
 Albums = {'title' : [], 'href' : []}
 Artists = []
@@ -56,21 +56,34 @@ for albumCODE in AlbumMatches:
 j=0
 artist_re = re.compile(sys.argv[1], re.DOTALL | re.IGNORECASE)    
 artistExclude_re = re.compile('|'.join(artistExclude), re.DOTALL | re.IGNORECASE)
+artistExclude2_re = re.compile('A.K.A', re.DOTALL | re.IGNORECASE)
 for artistCODE in ArtistMatches:
     aExcludeMatch = artistExclude_re.search(artistCODE.getText())
     if aExcludeMatch is not None:
         print "Contains other artists, skipping"
     else:
-        print "Artist %s:\t %s" % (j,artistCODE.a.getText())
-        Artists.append(artistCODE.a.getText())
-        artist_reMatch = artist_re.search(Artists[-1])
-        if artist_reMatch is not None:
-            albumURL = rootURL + Albums['href'][j]
-            print "Artist Match:\t %s" % Artists[j]
-            print "Album Match:\t %s" % Albums['title'][j]
-            print "Album Match URL:\t %s" % Albums['href'][j]
-            break
-        j += 1
+        aExcludeMatch2 = artistExclude2_re.search(artistCODE.getText())
+        if aExcludeMatch2 is None:
+            print "Artist %s:\t %s" % (j,artistCODE.a.getText())
+            Artists.append(artistCODE.a.getText())
+            artist_reMatch = artist_re.search(Artists[-1])
+            if artist_reMatch is not None:
+                albumURL = rootURL + Albums['href'][j]
+                print "Artist Match:\t %s" % Artists[j]
+                print "Album Match:\t %s" % Albums['title'][j]
+                print "Album Match URL:\t %s" % Albums['href'][j]
+                break
+            j += 1
+        else:
+            print "Artist %s:\t %s" % (j,artistCODE.a.getText())
+            Artists.append(artistCODE.a.getText())
+            artist_reMatch = artist_re.search(Artists[-1])
+            if artist_reMatch is not None:
+                albumURL = rootURL + Albums['href'][j]
+                print "Artist Match:\t %s" % Artists[j]
+                print "Album Match:\t %s" % Albums['title'][j]
+                print "Album Match URL:\t %s" % Albums['href'][j]
+                break
 
 
 #albumURL = rootURL + Albums['href'][0]
