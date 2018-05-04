@@ -103,7 +103,7 @@ for artistCODE in ArtistMatches:
         aExcludeMatch2 = artistExclude2_re.search(artistCODE.getText())
         if aExcludeMatch2 is None:
             print "Artist %s:\t %s" % (j,artistCODE.a.getText())
-            Artists.append(artistCODE.a.getText())
+            Artists.append(artistCODE.a.getText().replace('&amp;', '&'))
             albumURL = MatchArtist(sys.argv[1], Artists, Albums, j)
             if albumURL:
                 break
@@ -129,7 +129,12 @@ except urllib2.HTTPError:
 soup = BeautifulSoup(HTML)
 moreImagesBLOCK = soup.find('p', {'class' : 'image_gallery_more'})
 
-releaseImgHREF = moreImagesBLOCK.a['href']
+try:
+    releaseImgHREF = moreImagesBLOCK.a['href']
+except AttributeError:
+    moreImagesBLOCK = soup.find('div', {'class' : 'image_gallery image_gallery_large'})
+    releaseImgHREF = moreImagesBLOCK.a['href']
+    
 releaseImgURL = rootURL + releaseImgHREF
 
 print "Release Image URL:\t %s" % releaseImgURL
